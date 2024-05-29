@@ -8,18 +8,38 @@ use Pyncer\IO\File\FileMode;
 
 class File implements FileInterface
 {
-    protected string $file;
-    protected FileMode $mode;
+    protected ?string $file;
+    protected FileMode $fileMode;
     /** @var array<string, mixed> **/
     protected array $params;
     /** @var null|resource **/
-    protected mixed $handle = null;
+    protected $handle = null;
     /** @var null|int<0, max> **/
     protected ?int $readLength = null;
 
     public function __destruct()
     {
         $this->close();
+    }
+
+    public function getFile(): ?string
+    {
+        return $this->file;
+    }
+
+    public function getFileMode(): FileMode
+    {
+        return $this->fileMode;
+    }
+
+    /**
+     * Gets the current file handle.
+     *
+     * @return null|resource
+     */
+    public function getStream()
+    {
+        return $this->handle;
     }
 
     /**
@@ -51,29 +71,28 @@ class File implements FileInterface
     }
 
     /**
-     * Opens a file.
-     *
-     * @param string $file The file to open.
-     * @param \Pyncer\IO\File\FileMode $mode The filemode to use.
-     * @param array<string, mixed> $params An array of parameters.
-     * @return bool True on success, otherwise false.
+     * @inheritdoc
      */
     public function open(
-        string $file,
-        FileMode $mode = FileMode::READ_WRITE,
+        ?string $file = null,
+        FileMode $fileMode = FileMode::READ_WRITE,
         array $params = [],
     ): bool
     {
         $this->file = $file;
-        $this->mode = $mode;
+        $this->fileMode = $fileMode;
         $this->params = $params;
 
-        $fmode = $this->getMode($mode, $params);
+        $mode = $this->getMode($fileMode, $params);
 
         // Ensure any previously opened file is closed
         $this->close();
 
-        $handle = fopen($file, $fmode);
+        if ($file === null) {
+            $handle = tmpfile();
+        } else {
+            $handle = fopen($file, $mode);
+        }
 
         $this->handle = ($handle ? $handle : null);
 
@@ -83,35 +102,35 @@ class File implements FileInterface
     /**
      * Gets the string mode to use when calling fopen.
      *
-     * @param \Pyncer\IO\File\FileMode $mode The filemode to use.
+     * @param \Pyncer\IO\File\FileMode $fileMode The filemode to use.
      * @param array<string, mixed> $params Additional parameters to use.
      * @return string
      */
-    protected function getMode(FileMode $mode, array $params): string
+    protected function getMode(FileMode $fileMode, array $params): string
     {
-        $fmode = '';
+        $mode = '';
 
-        if ($mode === FileMode::WRITE || $mode === FileMode::READ_WRITE) {
+        if ($fileMode === FileMode::WRITE || $fileMode === FileMode::READ_WRITE) {
             if ($params['truncate'] ?? false) {
-                $fmode = 'w';
+                $mode = 'w';
             } elseif ($params['append'] ?? false) {
-                $fmode = 'a';
+                $mode = 'a';
             } else {
-                $fmode = 'c';
+                $mode = 'c';
             }
 
-            if ($mode === FileMode::READ_WRITE) {
-                $fmode .= '+';
+            if ($fileMode === FileMode::READ_WRITE) {
+                $mode .= '+';
             }
         } else {
-            $fmode = 'r';
+            $mode = 'r';
         }
 
         if ($params['binary'] ?? false) {
-            $fmode .= 'b';
+            $mode .= 'b';
         }
 
-        return $fmode;
+        return $mode;
     }
 
     public function isOpen(): bool
