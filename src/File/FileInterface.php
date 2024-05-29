@@ -6,6 +6,12 @@ use Pyncer\IO\File\FileMode;
 interface FileInterface
 {
     /**
+     * Gets the current file handle.
+     *
+     * @return null|resource
+     */
+    public function getStream();
+    /**
      * Opens a file.
      *
      * @param string $file The file to open.

@@ -33,9 +33,7 @@ class File implements FileInterface
     }
 
     /**
-     * Gets the current file handle.
-     *
-     * @return null|resource
+     * @inheritdoc
      */
     public function getStream()
     {
