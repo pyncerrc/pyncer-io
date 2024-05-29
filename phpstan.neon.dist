@@ -1,0 +1,29 @@
+parameters:
+    level: max
+    paths:
+        - src
+    ignoreErrors:
+        -
+            message: "#^Parameter \\#1 \\$stream of function fread expects resource, resource\\|null given\\.$#"
+            count: 1
+            path: src/File/File.php
+        -
+            message: "#^Parameter \\#1 \\$stream of function fgets expects resource, resource\\|null given\\.$#"
+            count: 1
+            path: src/File/TextFile.php
+        -
+            message: "#^Constant Pyncer\\\\NL not found\\.$#"
+            count: 1
+            path: src/File/TextFile.php
+        -
+            message: "#^Used constant Pyncer\\\\NL not found\\.$#"
+            count: 1
+            path: src/File/TextFile.php
+        -
+            message: "#^Parameter \\#1 \\$stream of function fputcsv expects resource, resource\\|null given\\.$#"
+            count: 1
+            path: src/File/CsvFile.php
+        -
+            message: "#^Parameter \\#1 \\$stream of function fgetcsv expects resource, resource\\|null given\\.$#"
+            count: 1
+            path: src/File/CsvFile.php

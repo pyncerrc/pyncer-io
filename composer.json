@@ -1,0 +1,29 @@
+{
+    "name": "pyncer/io",
+    "type": "library",
+    "description": "Pyncer library for handling file operations.",
+    "homepage": "https://pyncer.com/io",
+    "license": "Unlicense",
+    "require": {
+        "php": ">=8.3",
+        "pyncer/core": "^1.2",
+        "pyncer/exception": "^1.0"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.11"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pyncer\\IO\\": "src/"
+        }
+    },
+    "support": {
+        "issues": "https://github.com/pyncerrc/pyncer-io/issues",
+        "source": "https://github.com/pyncerrc/pyncer-io"
+    },
+    "extra" : {
+        "branch-alias" : {
+            "dev-main" : "1.0-dev"
+        }
+    }
+}

@@ -1,0 +1,4 @@
+/TODO
+/vendor
+composer.lock
+phpstan.neon
