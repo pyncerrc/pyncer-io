@@ -22,11 +22,17 @@ class File implements FileInterface
         $this->close();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getFile(): ?string
     {
         return $this->file;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getFileMode(): FileMode
     {
         return $this->fileMode;
@@ -88,6 +94,8 @@ class File implements FileInterface
 
         if ($file === null) {
             $handle = tmpfile();
+            $metaData = stream_get_meta_data($handle);
+            $this->file = $metaData['uri'];
         } else {
             $handle = fopen($file, $mode);
         }

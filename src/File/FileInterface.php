@@ -6,11 +6,26 @@ use Pyncer\IO\File\FileMode;
 interface FileInterface
 {
     /**
+     * Gets the current file URI.
+     *
+     * @return null|string
+     */
+    public function getFile(): ?string;
+
+    /**
+     * Gets the current file mode.
+     *
+     * @return Pyncer\IO\File\FileMode
+     */
+    public function getFileMode(): FileMode;
+
+    /**
      * Gets the current file handle.
      *
      * @return null|resource
      */
     public function getStream();
+
     /**
      * Opens a file.
      *
